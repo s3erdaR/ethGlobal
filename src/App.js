@@ -59,12 +59,6 @@ function App() {
     }
   }
 
-  async function createProposal() {
-    console.log("proposal created");
-    await server_contract?.createProposal();
-  }
-
-
   const[_movieId, setMovieId] = useState("");
   async function vote() {
     await daoContract?.UpVoteMovie(_movieId);
@@ -82,11 +76,9 @@ function App() {
     setInterval(await server_contract?.getVotingInterval());
     console.log("Interval time: " + _intervalTime + "second")
   }
+
   const intervalTime = 70;
-  
-  const [_chosenMovie, setChosenMovie] = useState();
-
-
+  let chosen_movie = null;
 
   async function Autonomous() {
     while (true) {
@@ -106,10 +98,10 @@ function App() {
 
       await sleep(intervalTime);
 
-      const txnResMov = await server_contract?.getChosenMovie();
-      const txnRecMov = await txnResMov.wait();
-
-      console.log("Chosen Movie:"+ _chosenMovie);
+      const chosen_mov = await server_contract?.getCurrentMovie();
+      chosen_movie = movies[chosen_mov];
+      setYoutubeLink(movies[chosen_mov].trailer); 
+      console.log("Chosen Movie:"+movies[chosen_mov]);
 
       await sleep(30);
       console.log("Loop finished");
@@ -146,15 +138,14 @@ function App() {
         <input placeholder = "Enter The Movie ID"value = {_movieId} onChange={(e) => setMovieId(e.target.value)} /><h1></h1>
         <button onClick={vote}> VoteUp </button>
         {/* <h1>Moive Name: {films[_movieId].title}, VoteUp: {_currentVote}</h1> */}
-        <h1>Chosen Movie: {_chosenMovie}</h1>
+        <h1>Chosen Movie: {chosen_movie?.title}</h1>
         <h1>Last video is: {lastLink}</h1>
         <h1>Total amount is: {balance}</h1>
       </div>
 
       <h1>Watch The Film</h1>
-      {/* <Form setYoutubeLink={setYoutubeLink}/> */}
         <br></br>
-        {/* <Youtube youtubeLink={movies[_chosenMovie]}/> */}
+        <Youtube youtubeLink={youtubeLink}/>
         {/* <Youtube youtubeLink={lastLink}/> */}
     </div>
   );
