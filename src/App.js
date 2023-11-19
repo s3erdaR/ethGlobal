@@ -13,12 +13,9 @@ function App() {
 
   const [youtubeLink, setYoutubeLink]= useState(null);
   const [movieTitle, setMovieTitle]= useState(null);
-  
-
   const [account, setAccount] = useState("");
   const [provider, setProvider] = useState("");
   const daoContract = useDaoContract();
-  
   const server_contract = useServerContract();
 
   function connect() {
@@ -37,12 +34,18 @@ function App() {
     console.log(signer);
     
   }
+
   const[_movieId, setMovieId] = useState("");
   async function vote() {
-    await daoContract?.UpVoteMovie(_movieId);
-    console.log("Voted movie: " + movies[_movieId].title);
 
+    try {
+      await daoContract?.UpVoteMovie(_movieId);
+    } catch (error) {
+      console.log(error)
+    }
+    console.log("Voted movie: " + movies[_movieId].title);
   }
+
   const[_currentVote, setVoteCount] = useState("");
   async function getCurrentVote() {
     setVoteCount(await server_contract?.getVoteNumber(_movieId));
@@ -58,8 +61,15 @@ function App() {
   const intervalTime = 70;
   let chosen_movie = null;
 
+
+
   async function Autonomous() {
     while (true) {
+
+      try {
+      
+      const voteCounter = Array(10).fill(0);
+
       console.log("Loop başlıyor.");
 
       console.log(server_contract);
@@ -77,6 +87,7 @@ function App() {
       await sleep(intervalTime);
 
       const chosen_mov = await server_contract?.getCurrentMovie();
+      voteCounter[chosen_mov]++;
       chosen_movie = movies[chosen_mov];
       setYoutubeLink(movies[chosen_mov].trailer); 
       setMovieTitle(movies[chosen_mov].title);
@@ -85,6 +96,10 @@ function App() {
       await sleep(15);
       console.log("Loop finished");
       
+        
+      } catch (error) {
+        console.log(error);
+      }
     }
   }
 
