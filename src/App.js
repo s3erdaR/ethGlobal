@@ -82,7 +82,7 @@ function App() {
     setInterval(await server_contract?.getVotingInterval());
     console.log("Interval time: " + _intervalTime + "second")
   }
-  const intervalTime = 30;
+  const intervalTime = 70;
   
   const [_chosenMovie, setChosenMovie] = useState();
 
@@ -102,19 +102,19 @@ function App() {
       await sleep(intervalTime);
       
       const txnRes1 = await server_contract?.finalizeProposal();
-      const txnRec1 = await txnRes.wait();
+      const txnRec1 = await txnRes1.wait();
 
-      // const a = await server_contract?.getChosenMovie();
-      // console.log("Chosen Movie:"+ _chosenMovie);
-      console.log("Loop finished");
       await sleep(intervalTime);
 
-    
-   
-    
+      const txnResMov = await server_contract?.getChosenMovie();
+      const txnRecMov = await txnResMov.wait();
+
+      console.log("Chosen Movie:"+ _chosenMovie);
+
+      await sleep(30);
+      console.log("Loop finished");
+      
     }
-    
-    
   }
 
   useEffect(()=>{
@@ -154,7 +154,7 @@ function App() {
       <h1>Watch The Film</h1>
       {/* <Form setYoutubeLink={setYoutubeLink}/> */}
         <br></br>
-        <Youtube youtubeLink={movies[_chosenMovie]}/>
+        {/* <Youtube youtubeLink={movies[_chosenMovie]}/> */}
         {/* <Youtube youtubeLink={lastLink}/> */}
     </div>
   );
