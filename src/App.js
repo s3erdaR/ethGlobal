@@ -84,7 +84,7 @@ function App() {
   }
   const intervalTime = 30;
   
-  const [_chosenMovie, setChosenMovie] = useState("");
+  const [_chosenMovie, setChosenMovie] = useState();
 
 
 
@@ -104,11 +104,13 @@ function App() {
       const txnRes1 = await server_contract?.finalizeProposal();
       const txnRec1 = await txnRes.wait();
 
+      // const a = await server_contract?.getChosenMovie();
+      // console.log("Chosen Movie:"+ _chosenMovie);
       console.log("Loop finished");
       await sleep(intervalTime);
 
-    setChosenMovie(await server_contract?.getChosenMovie());
-    console.log("Chosen Movie:"+ _chosenMovie);
+    
+   
     
     }
     
@@ -152,7 +154,7 @@ function App() {
       <h1>Watch The Film</h1>
       {/* <Form setYoutubeLink={setYoutubeLink}/> */}
         <br></br>
-        <Youtube youtubeLink={movies[_chosenMovie].trailer}/>
+        <Youtube youtubeLink={movies[_chosenMovie]}/>
         {/* <Youtube youtubeLink={lastLink}/> */}
     </div>
   );

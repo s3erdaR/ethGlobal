@@ -15,10 +15,7 @@ export const useDaoContract = () => {
     setContract(_contract);
     },[]);
     
-
     return contract;
-    
-
 };
 
 export const useServerContract =  () => {
