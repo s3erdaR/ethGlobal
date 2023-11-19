@@ -15,7 +15,7 @@ enum Status{
 
 contract DATV{
 
-    uint VOTE_INTERVAL = 100;//seconds
+    uint VOTE_INTERVAL = 60;//seconds
 
     mapping(uint=>Proposal) private Proposals;
     uint proposal_count = 0;
@@ -54,8 +54,7 @@ contract DATV{
        
     }
     
-
-    function getChosenMovie() view public returns (uint) 
+    function getChosenMovie() view internal  returns (uint) 
     {
         //frontend kısmında bir for loop ile bu fonk çağırılır ve en fazla çıkan film ile finalize yapılır.
         uint max_index = 0;
@@ -71,6 +70,16 @@ contract DATV{
         }
 
         return max_index;
+    }
+
+    function getVotes() view public returns (uint[] memory)
+    {
+        uint[] memory arr ;
+        for(uint i = 0;i<100;i++)
+        {
+                arr[i] = Proposals[proposal_count].votes[i];
+        }
+        return  arr;
     }
 
     function IsVotingOverFunc() view public returns (bool)
