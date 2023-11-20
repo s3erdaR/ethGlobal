@@ -1,3 +1,4 @@
+This project created for ETHGlobal Istanbul hackathon.
 
   **Decentralized Autonomous TV (DATV)**
 
